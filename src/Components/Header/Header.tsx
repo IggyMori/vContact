@@ -1,25 +1,35 @@
+import {useAuth} from '../../hooks/useAuth'
 
-
+import {removeUser} from "../../Store/Slices/userSlice";
+import {useNavigate} from "react-router-dom";
+import {Button} from "react-bootstrap";
+import '../../Styles/Components/Buttons.scss'
+import {useAppDispatch} from "../../hooks/reduxHooks";
 export const Header: React.FC = () => {
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const {isAuth, email} = useAuth();
+    const logOut = () => {
+        dispatch(removeUser());
+        navigate('/login');
+    }
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <div className="container">
-                <a className="navbar-brand" href="#">vContact</a>
-                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span className="navbar-toggler-icon"></span>
-                </button>
-                <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
-                    <ul className="navbar-nav">
-                        <li className="nav-item">
-                            <a className="nav-link" href="#">Раздел 1</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="#">Раздел 2</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="#">Раздел 3</a>
-                        </li>
-                    </ul>
+                <span className="navbar-brand" onClick={() => navigate('/')}>vContact</span>
+
+                <div className="justify-content-end">
+
+
+                            {
+                                isAuth ?
+
+                                    <Button className='LogOutButton' onClick={() => logOut()}>Выйти</Button>   : <Button className='LoginSingUpButton' onClick={() => navigate('/login')}>Войти</Button>
+                            }
+
+
+
+
                 </div>
             </div>
         </nav>

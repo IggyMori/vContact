@@ -2,9 +2,15 @@ import {useState} from "react";
 import {CustomInput} from "../CustomInput/CustomInput";
 import {Button, Form, Row} from "react-bootstrap";
 
-export const CustomForm = ({title, handleClick}) => {
-    const [email,setEmail] = useState('')
-    const [pass, setPass] = useState('')
+
+interface CustomFormProps {
+    title: string;
+    handleCLick: (email: string, pass: string) => void;
+}
+
+export const CustomForm: React.FC<CustomFormProps> = ({title, handleClick}) => {
+    const [email,setEmail] = useState<string>('')
+    const [pass, setPass] = useState<string>('')
     return(<div className='container p-4 my-5 d-flex flex-column w-50 '>
         <h1>{title}</h1>
         <Form>
@@ -16,7 +22,7 @@ export const CustomForm = ({title, handleClick}) => {
                     }
                     required={true}
                     label="Email"
-                    type="text"
+                    type="email"
                     name='Email'
 
                     value={
@@ -37,7 +43,7 @@ export const CustomForm = ({title, handleClick}) => {
                     }
                     required={true}
                     label="Пароль"
-                    type="text"
+                    type="password"
                     name='Password'
 
                     value={

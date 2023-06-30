@@ -9,9 +9,12 @@ import {Footer} from "./Components/Footer/Footer";
 import {Routes, Route} from 'react-router-dom'
 import {LoginPage} from "./Pages/LoginPage";
 import {RegisterPage} from "./Pages/RegisterPage";
+import {MainPage} from "./Pages/MainPage";
+import {PrivateRouter} from "./utils/PrivateRouter";
+
 
 function App() {
-  const [count, setCount] = useState(0)
+
 
   return (
     <div className='App'>
@@ -20,6 +23,10 @@ function App() {
             <Route path= '/' element={<StartPage />} />
             <Route path='/login' element={<LoginPage />} />
             <Route path = '/registration' element={<RegisterPage />} />
+            <Route element={<PrivateRouter />} >
+                <Route path = '/mainPage' element={<MainPage />} />
+            </Route>
+
         </Routes>
 
         <Footer/>

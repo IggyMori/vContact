@@ -1,12 +1,25 @@
-import {useDispatch} from "react-redux";
 import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from "firebase/auth";
-import {setUser} from '../../Store/Slices/UserSlices'
+import {setUser} from '../../Store/Slices/userSlice'
 import {CustomForm} from "../Form/CustomForm.tsx";
-export const SignUp = () => {
-    const dispatch = useDispatch()
+import {useNavigate} from "react-router-dom";
+import {useAppDispatch} from "../../hooks/reduxHooks";
+export const SignUp: React.FC = () => {
+    const dispatch = useAppDispatch()
+    const navigate = useNavigate();
+
     const handleSingUp = (email, password) => {
         const auth = getAuth();
-        createUserWithEmailAndPassword(auth,email,password).then(console.log).catch(console.error)
+
+        createUserWithEmailAndPassword(auth,email,password).
+        then(({user}) => {
+            dispatch(setUser(
+                {
+                    email: user.email,
+                    id: user.uid,
+                }
+            ));
+            navigate('/')
+        }).catch(console.error)
     }
 return(
     <div className='container'>
