@@ -1,4 +1,4 @@
-import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from "firebase/auth";
+import {getAuth, createUserWithEmailAndPassword} from "firebase/auth";
 import {setUser} from '../../Store/Slices/userSlice'
 import {CustomForm} from "../Form/CustomForm.tsx";
 import {useNavigate} from "react-router-dom";
@@ -7,7 +7,7 @@ export const SignUp: React.FC = () => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate();
 
-    const handleSingUp = (email, password) => {
+    const handleSingUp = (email: string, password: string) => {
         const auth = getAuth();
 
         createUserWithEmailAndPassword(auth,email,password).

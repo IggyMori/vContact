@@ -1,5 +1,5 @@
 import { Form } from "react-bootstrap";
-export const CustomInput = (props) => {
+export const CustomInput: React.FC<any> = (props) => {
     return (
         <>
             <Form.Label>{props.label}</Form.Label>

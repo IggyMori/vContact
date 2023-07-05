@@ -8,7 +8,7 @@ import {useAppDispatch} from "../../hooks/reduxHooks";
 export const Header: React.FC = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const {isAuth, email} = useAuth();
+    const {isAuth} = useAuth();
     const logOut = () => {
         dispatch(removeUser());
         navigate('/login');

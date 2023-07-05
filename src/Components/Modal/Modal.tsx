@@ -1,5 +1,5 @@
 
-import { Button, Col, Container, Row } from "react-bootstrap";
+import {Col, Container, Row } from "react-bootstrap";
 import '../../Styles/Components/Modal.scss'
 import cross from "../../assets/cross.png";
 import {PropsWithChildren} from "react";
@@ -7,7 +7,7 @@ import {PropsWithChildren} from "react";
 
 interface ModalProps{
     open: boolean;
-    onClose: () => void;
+    onClose: (arg: boolean) => void;
 }
 export const Modal: React.FC<PropsWithChildren<ModalProps>> = ({ open, onClose, children }) => {
     return (

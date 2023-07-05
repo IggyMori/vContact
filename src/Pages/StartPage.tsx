@@ -2,12 +2,11 @@ import {Button} from "react-bootstrap";
 import '../Styles/Components/Buttons.scss'
 import '../Styles/Pages/StartPage.scss'
 import {Link, Navigate} from 'react-router-dom'
-import {redirect} from 'react-router-dom'
 
 import {useAuth} from '../hooks/useAuth'
 
 export const StartPage: React.FC = () => {
-const {isAuth, id} = useAuth();
+const {isAuth} = useAuth();
     return isAuth ? <Navigate to='/mainPage' replace={true}/> :  (
         <div className='startPage'>
             <div className='container'>

@@ -8,8 +8,6 @@ import cross from "../../assets/cross.png";
 import {collection, addDoc, updateDoc, deleteDoc, doc} from "firebase/firestore";
 import {db} from "../../../firebase";
 import {PulseLoader} from "react-spinners";
-import {ContactProps} from "../Contact/Contact";
-
 interface ContactFormProps{
 
     type?: string;
@@ -28,21 +26,20 @@ enum InputEnum{
     Tags = 'tags'
 }
 export const ContactForm: React.FC<ContactFormProps> = ({getContacts,onClose, type, contact}) => {
-    const {isAuth, id} = useAuth();
-
-    const initialInputState = {
-        accountId: id,
-        lastName: type === 'edit' ? contact?.lastName  : '',
-        firstName: type === 'edit' ? contact?.firstName :  '',
-        middleName: type === 'edit' ? contact?.middleName : '',
-        email: type === 'edit' ? contact?.email : '',
-        phone: type === 'edit' ? contact?.phone : '',
-        tags: type === 'edit' ? contact?.tags : []
-    }
+    const {id, isAuth} = useAuth();
 
 
-
-    const [inputData, setInputData] = useState<Partial<Contact>>(initialInputState)
+    const [inputData, setInputData] = useState<Partial<Contact>>(
+        {
+            accountId: isAuth !== false ? id : '',
+            lastName: type === 'edit' ? contact?.lastName  : '',
+            firstName: type === 'edit' ? contact?.firstName :  '',
+            middleName: type === 'edit' ? contact?.middleName : '',
+            email: type === 'edit' ? contact?.email : '',
+            phone: type === 'edit' ? contact?.phone : '',
+            tags: type === 'edit' ? contact?.tags : [] as string[],
+        }
+    )
     const [tag,setTag] = useState<string>('');
     const [loading,setLoading] = useState<string>('')
     const contactsCollection = collection(db, 'contacts');
@@ -51,12 +48,22 @@ export const ContactForm: React.FC<ContactFormProps> = ({getContacts,onClose, ty
     }
 
     const cancelHandler = () => {
-        setInputData(initialInputState);
+        setInputData(
+            {
+                accountId: isAuth !== false ? id : '',
+                lastName: type === 'edit' ? contact?.lastName  : '',
+                firstName: type === 'edit' ? contact?.firstName :  '',
+                middleName: type === 'edit' ? contact?.middleName : '',
+                email: type === 'edit' ? contact?.email : '',
+                phone: type === 'edit' ? contact?.phone : '',
+                tags: type === 'edit' ? contact?.tags : [] as string[],
+            }
+        );
         onClose();
     }
 
     const setTagToInputData = () => {
-        const newTags = [...inputData.tags, tag];
+        const newTags = [...(inputData.tags || []), tag];
         if(tag !== ''){
             setInputData({...inputData, tags: newTags});
             setTag('');
@@ -67,7 +74,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({getContacts,onClose, ty
     const deleteTagFromInputData = (idx: number) => {
         const updatedTags = inputData.tags?.filter((_, index) => index !== idx);
 
-        setInputData({...inputData, tags: updatedTags});
+        setInputData({ ...inputData, tags: updatedTags });
 
     }
 
@@ -83,7 +90,16 @@ export const ContactForm: React.FC<ContactFormProps> = ({getContacts,onClose, ty
             tags: inputData.tags
         }
         await addDoc(contactsCollection, newContact).then(() => setLoading(''));
-        setInputData(initialInputState)
+
+        setInputData({
+            accountId: '',
+            lastName: '',
+            firstName: '',
+            middleName: '',
+            email: '',
+            phone:'',
+            tags:  [],
+        })
         getContacts();
         onClose();
     }
@@ -152,7 +168,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({getContacts,onClose, ty
                     value = {inputData.lastName}
                     error={
                         false}
-                    onChange={(e) => handleInputChange(InputEnum.LastName, e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(InputEnum.LastName, e.target.value)}
 
                     maxLength={40} />
             </Form.Group>
@@ -173,7 +189,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({getContacts,onClose, ty
 
                     value = {inputData.firstName}
 
-                    onChange={(e) => handleInputChange(InputEnum.FirstName, e.target.value)}
+                    onChange={(e : React.ChangeEvent<HTMLInputElement>) => handleInputChange(InputEnum.FirstName, e.target.value)}
                     maxLength={40} />
             </Form.Group>
             <Form.Group as={Col} lg={4}  md={12}
@@ -193,7 +209,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({getContacts,onClose, ty
 
                     value = {inputData.middleName}
 
-                    onChange={(e) => handleInputChange(InputEnum.MiddleName, e.target.value)}
+                    onChange={(e : React.ChangeEvent<HTMLInputElement>) => handleInputChange(InputEnum.MiddleName, e.target.value)}
                     maxLength={40} />
             </Form.Group>
         </Row>
@@ -214,7 +230,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({getContacts,onClose, ty
                             false}
 
                         value = {inputData.email}
-                        onChange={(e) => handleInputChange(InputEnum.Email, e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(InputEnum.Email, e.target.value)}
                         maxLength={40} />
                 </Form.Group>
                 <Form.Group as={Col} lg={4} md={12}
@@ -233,7 +249,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({getContacts,onClose, ty
                             false}
 
                         value = {inputData.phone}
-                        onChange={(e) => handleInputChange(InputEnum.Phone, e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(InputEnum.Phone, e.target.value)}
                         maxLength={40} />
                 </Form.Group>
 
@@ -255,7 +271,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({getContacts,onClose, ty
                             onChange={(e) => setTag(e.target.value)}
                         />
                         <Button onClick={() => setTagToInputData()} variant="outline-success"
-                        disabled={inputData.tags?.length === 3}
+                        disabled={inputData.tags && inputData.tags.length >= 3}
                         >
                             +
                         </Button>

@@ -11,9 +11,9 @@ export interface ContactProps{
     phone: string;
     email: string;
 
-    tags: [];
+    tags: string[];
 
-    accountId: string;
+    accountId: string | null;
     getContacts: () => void;
 }
 export const Contact: React.FC<ContactProps> =

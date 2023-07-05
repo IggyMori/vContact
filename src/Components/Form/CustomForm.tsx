@@ -1,11 +1,11 @@
 import {useState} from "react";
 import {CustomInput} from "../CustomInput/CustomInput";
-import {Button, Form, Row} from "react-bootstrap";
+import {Button, Form} from "react-bootstrap";
 
 
 interface CustomFormProps {
     title: string;
-    handleCLick: (email: string, pass: string) => void;
+    handleClick: (email: string, pass: string) => void;
 }
 
 export const CustomForm: React.FC<CustomFormProps> = ({title, handleClick}) => {
@@ -30,7 +30,7 @@ export const CustomForm: React.FC<CustomFormProps> = ({title, handleClick}) => {
                     }
                     error={
                         false}
-                    onChange={(e) => setEmail(e.target.value)
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)
 
                     }
                     maxLength={40} />
@@ -51,7 +51,7 @@ export const CustomForm: React.FC<CustomFormProps> = ({title, handleClick}) => {
                     }
                     error={
                         false}
-                    onChange={(e) => setPass(e.target.value)
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPass(e.target.value)
 
                     }
                     maxLength={40} />
