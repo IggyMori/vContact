@@ -15,6 +15,7 @@ export interface ContactProps{
 
     accountId: string | null;
     getContacts: () => void;
+    key: number;
 }
 export const Contact: React.FC<ContactProps> =
     ({id,
@@ -25,7 +26,8 @@ export const Contact: React.FC<ContactProps> =
          email,
          tags,
          accountId,
-        getContacts
+        getContacts,
+        key
      }) => {
 
     const contact = {
@@ -43,7 +45,7 @@ export const Contact: React.FC<ContactProps> =
     }
     const [modal, setModal] = useState<boolean>(false);
     return(
-       <div className='contactWrapper'>
+       <div className='contactWrapper' key={key}>
            <Modal open={modal} onClose={() => setModal(false)}>
                <h2>Внести изменения</h2>
                <ContactForm getContacts={() => getContacts()} type='edit' contact={contact} onClose={() => setModal(false)} />

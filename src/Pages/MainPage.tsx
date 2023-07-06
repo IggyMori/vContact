@@ -165,7 +165,7 @@ export const MainPage: React.FC = () => {
                     contacts.length === 0 ?
                         <h2>{searchValue !== '' ? 'Контакты не найдены' : 'У вас пока нет контактов'}</h2>
                         :
-                        contacts.map((contact) =>
+                        contacts.map((contact, i) =>
                         <Contact
                             id={contact.id}
                             firstName = {contact.firstName}
@@ -176,6 +176,7 @@ export const MainPage: React.FC = () => {
                             tags = {contact.tags}
                             accountId = {contact.accountId}
                             getContacts = {getContacts}
+                            key = {i}
                         />
                     )
 
