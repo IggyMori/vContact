@@ -4,10 +4,12 @@ import {useState} from "react";
 import {Contact} from "../../Pages/MainPage";
 import {useAuth} from "../../hooks/useAuth";
 import '../../Styles/Components/ContactForm.scss';
+import '../../Styles/Components/Validation.css'
 import cross from "../../assets/cross.png";
 import {collection, addDoc, updateDoc, deleteDoc, doc} from "firebase/firestore";
 import {db} from "../../../firebase";
 import {PulseLoader} from "react-spinners";
+import {validationHandler, ValidationType} from "./Validation";
 interface ContactFormProps{
 
     type?: string;
@@ -25,8 +27,17 @@ enum InputEnum{
     Phone = 'phone',
     Tags = 'tags'
 }
+
+interface ContactFormValidation {
+    email: ValidationType,
+    phone: ValidationType
+}
 export const ContactForm: React.FC<ContactFormProps> = ({getContacts,onClose, type, contact}) => {
     const {id, isAuth} = useAuth();
+    const [validation, setValidation] = useState<ContactFormValidation>({
+        email: {error: false, message: ""},
+        phone: {error: false, message: ""}
+    })
 
 
     const [inputData, setInputData] = useState<Partial<Contact>>(
@@ -44,9 +55,13 @@ export const ContactForm: React.FC<ContactFormProps> = ({getContacts,onClose, ty
     const [loading,setLoading] = useState<string>('')
     const contactsCollection = collection(db, 'contacts');
     const handleInputChange = (field: InputEnum, value: string) => {
-        setInputData({...inputData, [field]: value})
+        setInputData({...inputData, [field]: value});
+        validationHandler(field, value, validation, setValidation);
     }
 
+    const setTagHandler  = (value: string) => {
+        setTag(value.trim());
+    }
     const cancelHandler = () => {
         setInputData(
             {
@@ -59,6 +74,12 @@ export const ContactForm: React.FC<ContactFormProps> = ({getContacts,onClose, ty
                 tags: type === 'edit' ? contact?.tags : [] as string[],
             }
         );
+        setValidation(
+            {
+                email: {error: false, message: ""},
+                phone: {error: false, message: ""}
+            }
+        )
         onClose();
     }
 
@@ -226,12 +247,14 @@ export const ContactForm: React.FC<ContactFormProps> = ({getContacts,onClose, ty
                         type="email"
                         name='email'
 
-                        error={
-                            false}
+                        error={validation.email.error}
 
                         value = {inputData.email}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(InputEnum.Email, e.target.value)}
                         maxLength={40} />
+                    <p className="error">
+                        {validation.email.message}
+                    </p>
                 </Form.Group>
                 <Form.Group as={Col} lg={4} md={12}
                             xs={12} className="mt-2">
@@ -245,12 +268,14 @@ export const ContactForm: React.FC<ContactFormProps> = ({getContacts,onClose, ty
                         type="text"
                         name='phone'
 
-                        error={
-                            false}
-
+                        error={validation.phone.error}
+                        placeholder={'Формат:998xxxxxxxxx'}
                         value = {inputData.phone}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(InputEnum.Phone, e.target.value)}
-                        maxLength={40} />
+                        maxLength={12} />
+                    <p className="error">
+                        {validation.phone.message}
+                    </p>
                 </Form.Group>
 
                 <Col>
@@ -268,7 +293,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({getContacts,onClose, ty
                             type='text'
                             value={tag}
                             placeholder='Введите тег(например: Семья)'
-                            onChange={(e) => setTag(e.target.value)}
+                            onChange={(e) => setTagHandler(e.target.value)}
                         />
                         <Button onClick={() => setTagToInputData()} variant="outline-success"
                         disabled={inputData.tags && inputData.tags.length >= 3}
@@ -306,23 +331,23 @@ export const ContactForm: React.FC<ContactFormProps> = ({getContacts,onClose, ty
                 </Col>
             </Row>
             <Row className='mt-4'>
-                <Col lg={4} md={4} sm={12} className='mt-2'>
+                <Col lg={6} md={4} sm={12} className='mt-2'>
                     <Button disabled={loading !== ''} type='submit' variant="outline-success" >
                         <PulseLoader color={"#70a46e"} loading={loading === 'saveLoading'} size={3} />
 
-                        {type === 'edit' ? 'Сохранить' : 'Добавить'}
+                        {type === 'edit' ? 'Сохранить' : 'Добавить'} контакт
                     </Button>
                 </Col>
                 {
                     type === 'edit' ?
-                        <Col lg={4} md={4} sm={12} className='mt-2'>
+                        <Col lg={6} md={4} sm={12} className='mt-2'>
                             <Button disabled={loading !== ''} onClick={() => deleteContact()} variant="outline-danger">
                                 <PulseLoader color={"#7e4848"} loading={loading === 'deleteLoading'} size={3} />
                                 Удалить
                             </Button>
                         </Col> : ''
                 }
-                <Col lg={4} md={4} sm={12} className='mt-2'>
+                <Col lg={6} md={4} sm={12} className='mt-2'>
                     <Button disabled={loading !== ''}  onClick={() => cancelHandler()} variant="outline-info">
                        Отмена
                     </Button>

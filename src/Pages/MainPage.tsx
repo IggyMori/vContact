@@ -36,11 +36,9 @@ export const MainPage: React.FC = () => {
     const [countContacts, setCountContacts] = useState<number>(0);
     const [searchValue, setSearchValue] = useState<string>('');
 
-    console.log(lastDocEl)
     //Получить контакты с пагинацией
     const getContacts = async () =>  {
         setLoading(true);
-        console.log(searchValue)
         const doc = query(contactsCollection, where('accountId', '==', id), orderBy('lastName'), limit(4))
         const docSearch = query(contactsCollection, and(or(
             where('lastName', '==', searchValue.charAt(0).toUpperCase() + searchValue.slice(1)),
@@ -144,7 +142,7 @@ export const MainPage: React.FC = () => {
             <div className='container text-center'>
                 <h1>Контакты</h1>
                 <Row>
-                    <Col md={12} lg={12}>
+                    <Col md={12} lg={12} xs={12}>
                         <CustomInput
                             label= 'Поиск'
                         placeholder = 'Введите что-нибудь...'

@@ -5,7 +5,7 @@ export const CustomInput: React.FC<any> = (props) => {
             <Form.Label>{props.label}</Form.Label>
             <Form.Control
                 className={props.className}
-                style={{ borderColor: props.error === true ? "red" : "#ced4da" }}
+                style={{ borderColor: props.error === true ? "#ff0000" : "#ced4da" }}
                 type={props.type}
                 name={props.name}
                 onChange={props.onChange}
