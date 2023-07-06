@@ -34,9 +34,9 @@ export const CustomForm: React.FC<CustomFormProps> = ({title, handleClick}) => {
         validationHandler(name, value, validation, setValidation);
     }
     return(<div className='container p-4 my-5 d-flex flex-column w-50 '>
-        <h1>{title}</h1>
+        <h3>{title}</h3>
         <Form>
-            <Form.Group>
+            <Form.Group >
                 <CustomInput
 
                     disabled={
