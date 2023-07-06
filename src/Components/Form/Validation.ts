@@ -10,7 +10,7 @@ const setValidationValue = (
     setValidation : any,
     validation: any,
 ) => {
-    if (isValid) {
+    isValid ?
         setValidation({
             ...validation,
             [name]: {
@@ -18,7 +18,7 @@ const setValidationValue = (
                 message: message,
             },
         })
-    } else {
+        :
         setValidation({
             ...validation,
             [name]: {
@@ -26,8 +26,6 @@ const setValidationValue = (
                 message: message,
             },
         });
-    }
-
 }
 export const validationHandler = (
         name: string,
