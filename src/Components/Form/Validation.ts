@@ -31,7 +31,7 @@ export const validationHandler = (
         name: string,
         value: string,
         validation: any,
-        setValidation: any,
+        setValidation: (arg: any) => void,
 ) => {
     if (value === "") {
         setValidation({
