@@ -7,7 +7,7 @@ const setValidationValue = (
     isValid: boolean,
     name: string,
     message: string,
-    setValidation : any,
+    setValidation : (arg: any) => void,
     validation: any,
 ) => {
     isValid ?
